@@ -9,7 +9,7 @@ export class LoginPage extends BasePage {
     constructor(page: Page) {
         super(page);
         this.emailInput = this.page.locator('[data-qa="login-email"]');
-        this.passwordInput = this.page.getByRole('textbox', { name: 'Password' });
+        this.passwordInput = this.page.locator('[data-qa="login-password"]');
         this.loginButton = this.page.getByRole('button', { name: 'Login' });
     }
 
