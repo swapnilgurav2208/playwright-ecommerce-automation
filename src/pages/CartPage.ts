@@ -14,4 +14,15 @@ export class CartPage extends BasePage {
         const productNameInCart = this.productSummaryCard.getByText(productName);
         await expect(productNameInCart).toBeVisible();
     }
+
+    async deleteProductFromCart(productName:string):Promise<void>{
+        const productNameToDelete = this.productSummaryCard.filter({has:this.page.getByText(productName)});
+        const deleteProductButton = productNameToDelete.locator('[class="cart_quantity_delete"]');
+        await this.click(deleteProductButton, 'Delete Product');
+    }
+
+    async verifyProductIsDeletedFromCart(productName:string):Promise<void>{
+        const productNameToDelete = this.productSummaryCard.filter({has:this.page.getByText(productName)});
+        await expect(productNameToDelete).not.toBeVisible();
+    }
 }
