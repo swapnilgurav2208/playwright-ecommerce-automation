@@ -6,7 +6,8 @@ export class ProductsPage extends BasePage {
     readonly searchButton: Locator;
     readonly productCard: Locator;
     readonly productNames: Locator;
-    readonly viewProductButton: Locator;
+    readonly addToCartSuccessText: Locator;
+    readonly viewCartButton: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -17,9 +18,8 @@ export class ProductsPage extends BasePage {
         this.productNames = this.page.locator(
             '[class=product-image-wrapper] [class=single-products] [class*=productinfo] p'
         );
-        this.viewProductButton = this.page.locator(
-            ' [class=product-image-wrapper] [class=choose] a'
-        );
+        this.addToCartSuccessText = this.page.getByRole('heading', { name: 'Added!' });
+        this.viewCartButton = this.page.getByRole('link', { name: 'View Cart' });
     }
 
     async goto(): Promise<void> {
@@ -47,5 +47,24 @@ export class ProductsPage extends BasePage {
         const product = this.productCard.filter({ hasText: productName });
         const viewProduct = product.getByRole('link', { name: ' View Product' });
         await this.click(viewProduct, 'View Product');
+    }
+
+    async addToCart(productName: string): Promise<void> {
+        const product = this.productCard.filter({ hasText: productName });
+        await this.hover(product, 'Product Card');
+        const productOverlay = product.locator(
+            '[class="product-overlay"] [class="overlay-content"]'
+        );
+        const addToCart = productOverlay.getByText('Add to cart');
+        await this.click(addToCart, 'Add to Cart');
+    }
+
+    async verifyAddtoCartSuccess(): Promise<void> {
+        await expect(this.addToCartSuccessText).toContainText('Added');
+        await expect(this.viewCartButton).toBeVisible();
+    }
+
+    async viewCart(): Promise<void> {
+        await this.click(this.viewCartButton, 'View Cart');
     }
 }

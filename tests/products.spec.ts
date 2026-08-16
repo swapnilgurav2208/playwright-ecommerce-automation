@@ -2,6 +2,7 @@ import { test } from '@playwright/test';
 import { ProductsPage } from '../src/pages/ProductsPage';
 import { productData } from '../src/test-data/productData';
 import { ProductDetailsPage } from '../src/pages/ProductDetailsPage';
+import { CartPage } from '../src/pages/CartPage';
 
 test('Verify Products page is loaded', async ({ page }) => {
     const productsPage = new ProductsPage(page);
@@ -32,4 +33,19 @@ test('View product details', async ({ page }) => {
     await productsPage.viewProductDetails(productData.productName);
 
     await productDetailsPage.verifyProductName(productData.productName);
+});
+
+test('Verify product can be added to cart', async ({ page }) => {
+    const productsPage = new ProductsPage(page);
+    const cartPage = new CartPage(page);
+
+    await productsPage.goto();
+
+    await productsPage.addToCart(productData.productName);
+
+    await productsPage.verifyAddtoCartSuccess();
+
+    await productsPage.viewCart();
+
+    await cartPage.verifyProductInCart(productData.productName);
 });
