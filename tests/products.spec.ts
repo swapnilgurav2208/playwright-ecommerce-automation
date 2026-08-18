@@ -2,7 +2,6 @@ import { test } from '@playwright/test';
 import { ProductsPage } from '../src/pages/ProductsPage';
 import { productData } from '../src/test-data/productData';
 import { ProductDetailsPage } from '../src/pages/ProductDetailsPage';
-import { CartPage } from '../src/pages/CartPage';
 
 test('Verify Products page is loaded', async ({ page }) => {
     const productsPage = new ProductsPage(page);
